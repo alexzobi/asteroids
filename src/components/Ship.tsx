@@ -5,6 +5,7 @@ import Animated, {
   useAnimatedStyle,
   useAnimatedGestureHandler,
   withDecay,
+  interpolate,
 } from 'react-native-reanimated';
 import { PanGestureHandler } from 'react-native-gesture-handler';
 
@@ -27,52 +28,30 @@ const styles = StyleSheet.create({
 })
 
 type Props = {
-
+  accX: { value: number };
+  accY: { value: number };
+  rotation: { value: number };
 }
 
-const Ship = ({}: Props) => {
-  const translateX = useSharedValue(0);
-  const translateY = useSharedValue(0);
-  const { width, height } = Dimensions.get('screen');
-
-  const onGestureEvent = useAnimatedGestureHandler({
-    onStart: (evt, ctx) => {
-      ctx.offsetX = translateX.value;
-      ctx.offsetY = translateY.value;
-    },
-    onActive: (evt, ctx) => {
-      translateX.value = ctx.offsetX + evt.translationX;
-      translateY.value = ctx.offsetY + evt.translationY;
-    },
-    onEnd: evt => {
-      translateX.value = withDecay({
-        velocity: evt.velocityX,
-        clamp: [0, width - 75], // optionally define boundaries for the animation
-      });
-      translateY.value = withDecay({
-        velocity: evt.velocityY,
-        clamp: [0, height - 75], // optionally define boundaries for the animation
-      });
-    },
-  });
-
+const Ship = ({
+  accX,
+  accY,
+  rotation,
+}: Props) => {
   const animationStyle = useAnimatedStyle(() => {
     return {
       transform: [
-        { translateX: translateX.value },
-        { translateY: translateY.value },
+        { translateX: accX.value * .1 },
+        { translateY: accY.value * .1 },
+        { rotate: rotation.value },
       ]
     }
   });
 
   return (
-    <PanGestureHandler {...{onGestureEvent}}>
-      <Animated.View style={animationStyle}>
-        <View style={styles.Ship}>
-          <View style={styles.Ship__Nose} />
-        </View>
-      </Animated.View>
-    </PanGestureHandler>
+    <Animated.View style={[animationStyle, styles.Ship]}>
+      <View style={styles.Ship__Nose} />
+    </Animated.View>
   )
 };
 

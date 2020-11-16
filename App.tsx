@@ -1,24 +1,22 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * Generated with the TypeScript template
- * https://github.com/react-native-community/react-native-template-typescript
- *
- * @format
- */
-
 import React from 'react';
+import { View } from 'react-native';
 import Level from './src/pages/Level';
 import Ship from './src/components/Ship';
+import Joypad, { JoypadContext } from './src/components/Joypad';
 
 declare const global: {HermesInternal: null | {}};
 
 const App = () => {
   return (
-    <Level>
-      <Ship />
-    </Level>
+    <View style={{ height: '100%', width: '100%' }}>
+      <Level />
+        {/* <JoypadContext.Consumer> */}
+        {/* <Level>
+          <Ship />
+        </Level> */}
+      {/* </JoypadContext.Consumer> */}
+      {/* <Joypad /> */}
+    </View>
   );
 };
 
